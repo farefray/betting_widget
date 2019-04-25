@@ -6,15 +6,18 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "cross-env": "^5.2.0",
     "element-ui": "^2.0.1",
     "lodash": "^4.17.4",
+    "material-design-icons-iconfont": "^4.0.5",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuetify": "^1.5.13",
+    "wcer": "^1.0.3"
   },
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
-    "dev": "webpack --config ./build/webpack.dev.js --hide-modules",
-    "debug": "webpack --config ./build/webpack.dev.js --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack --config ./build/webpack.dev.js --hide-modules",
     "build": "webpack --config ./build/webpack.prod.js -p --progress  --hide-modules --colors"
   },
   "devDependencies": {
@@ -49,7 +52,6 @@
     "vue-loader": "^14.1.1",
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.8.1",
-    "webpack-chrome-extension-reloader": "^1.3.0",
     "webpack-merge": "^4.1.1",
     "zip-webpack-plugin": "^2.1.0"
   }

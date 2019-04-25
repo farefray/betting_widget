@@ -1,6 +1,3 @@
-/**
- * @see {@link https://developer.chrome.com/extensions/manifest}
- */
 module.exports = {
   name: 'my-ext',
   description: 'A Chrome extension project with Vue.js',
@@ -10,9 +7,6 @@ module.exports = {
     '16': 'icons/16.png',
     '128': 'icons/128.png'
   },
-  /**
-   * @see {@link https://developer.chrome.com/extensions/declare_permissions}
-   */
   permissions: [
     '<all_urls>',
     '*://*/*',
