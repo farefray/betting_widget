@@ -1,13 +1,22 @@
 const path = require('path')
 const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ChromeReloadPlugin = require('wcer')
+const ChromeReloadPlugin = require('webpack-chrome-extension-reloader')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
-
+const manifestLoader = require('../src/manifest-loader')
 const rootDir = path.resolve(__dirname, '..')
 
 let resolve = (dir) => path.join(rootDir, 'src', dir)
+
+function modify (buffer) {
+  // copy-webpack-plugin passes a buffer
+  const initialManifest = buffer.toString()
+  const loadedManifest = manifestLoader(initialManifest)
+
+  // pretty print to JSON with two spaces
+  return JSON.stringify(loadedManifest, null, 2)
+}
 
 module.exports = {
   entry: {
@@ -17,7 +26,7 @@ module.exports = {
     content: resolve('./content'),
     devtools: resolve('./devtools'),
     panel: resolve('./devtools/panel'),
-    background: resolve('./background'),
+    background: resolve('./background')
   },
   output: {
     path: path.join(rootDir, 'dist'),
@@ -88,7 +97,7 @@ module.exports = {
     }]
   },
   plugins: [
-		new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
+    new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
     // Customize your extension structure.
     htmlPage('home', 'app', ['manifest', 'vendor', 'tab']),
     htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
@@ -99,9 +108,13 @@ module.exports = {
     // End customize
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
     new ChromeReloadPlugin({
-      port: 9090,
-      manifest: path.join(rootDir, 'src', 'manifest.js')
-    }),
+      port: 9090, // Which port use to create the server
+      reloadPage: true, // Force the reload of the page also
+      entries: { // The entries used for the content/background scripts
+        content: resolve('./content'), // Use the entry names, not the file name or the path
+        background: 'background' // *REQUIRED
+      }}
+    ),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks: function (module) {
@@ -117,7 +130,14 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: './src/manifest.json',
+        transform (content, path) {
+          return modify(content)
+        }
+      }
+    ])
   ],
   performance: { hints: false }
 }
