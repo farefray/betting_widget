@@ -1,21 +1,21 @@
 <template lang="html">
-  <div id="widget-root" @click="activate">
-    <div id="widget-label" class="closed">
-      [Hi!1]
-    </div>
+  <div id="widget-root">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <widget/>
   </div>
 </template>
 
 <script>
+import widget from './root/widget.vue'
 export default {
+  components: {
+    widget
+  },
   data: () => ({}),
   computed: {},
-  created () {
-    console.log('content')
-  },
-  mounted () {
-    console.log('mounted')
-  },
+  created () {},
+  mounted () {},
   methods: {
     activate: () => {
       fetch(
@@ -44,12 +44,12 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #widget-root {
   position: fixed;
   top: 5px;
   right: 0px;
-  width: 30px;
+  width: 40px;
   height: 60px;
   z-index: 100000;
   transition: width 0.4s ease 0s, height 0.2s ease 0s;

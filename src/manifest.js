@@ -33,7 +33,7 @@ module.exports = {
       'js/content.js'
     ],
     run_at: 'document_end',
-    matches: ['<all_urls>'],
+    matches: ['*://blank.org/', '<all_urls>'],
     all_frames: true
   }],
   manifest_version: 2,
