@@ -1,9 +1,8 @@
 <template lang="html">
-  <div id="widget-root">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+  <v-app id="statmybets-root">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <widget/>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -45,28 +44,17 @@ export default {
 }
 </script>
 <style lang="scss">
-#widget-root {
+#statmybets-root {
   position: fixed;
   top: 5px;
   right: 0px;
-  width: 40px;
-  height: 60px;
   z-index: 100000;
   transition: width 0.4s ease 0s, height 0.2s ease 0s;
+  background: transparent;
 
-  #widget-label {
-    position: relative;
-    width: 30px;
-    height: 40px;
-    top: 17px !important;
-    display: block;
-    box-sizing: content-box;
-    border: 1px solid;
-    border-color: #000 #ffffff #000 #000;
-    //background-image: url(/images/icons/web100.png);
-    cursor: pointer;
-    border-radius: 4px 0 0 4px;
-    background-repeat: repeat-x;
+  .application--wrap {
+    min-width: 0 !important;
+    min-height: 0 !important;
   }
 }
 </style>

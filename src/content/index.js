@@ -8,7 +8,7 @@ Vue.use(Vuetify, {})
 Vue.config.productionTip = false
 
 let div = document.createElement('div')
-div.id = 'root'
+div.id = 'statmybets_root'
 div.style.position = 'absolute'
 div.style.height = '550px'
 div.style.width = '350px'
@@ -19,7 +19,7 @@ div.style.right = '-350px'
 window.onload = () => {
   document.body.appendChild(div)
   new Vue({ // eslint-disable-line no-new
-    el: '#root',
+    el: '#statmybets_root',
     render: h => h(root)
   })
 }
