@@ -1,14 +1,18 @@
 const path = require('path')
 const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ChromeHotReload = require('wcer')
+const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
+const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
 const rootDir = path.resolve(__dirname, '..')
+const { version } = require('../package.json');
 
 let resolve = (dir) => path.join(rootDir, 'src', dir)
 
+const mode = process.env.NODE_ENV;
 module.exports = {
+  mode,
   entry: {
     popup: resolve('./popup'),
     tab: resolve('./tab'),
@@ -34,12 +38,6 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.(js|vue)$/,
-      loader: 'eslint-loader',
-      enforce: 'pre',
-      include: [ path.join(rootDir, 'src') ],
-      options: { formatter: require('eslint-friendly-formatter') }
-    }, {
       test: /\.vue$/,
       loader: 'vue-loader',
       options: {
@@ -86,7 +84,10 @@ module.exports = {
       }
     }]
   },
-  plugins: [    
+  plugins: [
+    new webpack.DefinePlugin({
+      global: 'window'
+    }),
     // Customize your extension structure.
     htmlPage('home', 'app', ['manifest', 'vendor', 'tab']),
     htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
@@ -95,28 +96,24 @@ module.exports = {
     htmlPage('options', 'options', ['manifest', 'vendor', 'options']),
     htmlPage('background', 'background', ['manifest', 'vendor', 'background']),
     // End customize
-    new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') }]),
+    new VueLoaderPlugin(),
+    new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') },
+      {
+        from: './src/manifest.json',
+        to: 'manifest.json',
+        transform: (content) => {
+          const jsonContent = JSON.parse(content);
+          jsonContent.version = version;
+
+          if (mode === 'development') {
+            jsonContent['content_security_policy'] = "script-src 'self' 'unsafe-eval'; object-src 'self'";
+          }
+
+          return JSON.stringify(jsonContent, null, 2);
+        }
+      }]),
     new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
-    new ChromeHotReload({
-      port: 9090,
-      manifest: path.join(rootDir, 'src', 'manifest.js')
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function (module) {
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      chunks: ['vendor']
-    })
+    new ChromeExtensionReloader()
   ],
   performance: { hints: false }
 }

@@ -1,5 +1,5 @@
 const { resolve } = require('path')
-const { extract } = require('extract-text-webpack-plugin')
+const { extract } = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 exports.htmlPage = (title, filename, chunks, template) => new HtmlWebpackPlugin({

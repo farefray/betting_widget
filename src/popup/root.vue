@@ -1,6 +1,7 @@
-<template lang="pug">
-    div
-      el-button(type="primary" @click="tab") New tab
+<template>
+  <div>
+    <button @click="tab"> New tab </button>
+  </div>
 </template>
 <script>
   export default {

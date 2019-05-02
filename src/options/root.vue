@@ -1,5 +1,7 @@
-<template lang="pug">
-    div options
+<template>
+  <div>
+    options
+  </div>
 </template>
 <script>
   export default {

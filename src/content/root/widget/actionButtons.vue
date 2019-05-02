@@ -6,7 +6,6 @@
     <v-btn icon>
       <v-icon>view_module</v-icon>
     </v-btn>
-    {{test}}
   </div>
 </template>
 
@@ -14,8 +13,7 @@
 export default {
   data: () => ({
     loading: false,
-    records: [],
-    test: ''
+    records: []
   }),
   methods: {
     updateBets: function () {
