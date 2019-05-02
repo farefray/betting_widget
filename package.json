@@ -16,7 +16,7 @@
   },
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
-    "dev": "cross-env NODE_ENV=development webpack --config ./build/webpack.dev.js --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack --config ./build/webpack.dev.js --watch --hide-modules",
     "build": "webpack --config ./build/webpack.prod.js -p --progress  --hide-modules --colors"
   },
   "devDependencies": {

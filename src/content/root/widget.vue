@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn fab dark small icon color="indigo" @click.stop="right = !right">
+    <v-btn fab dark small icon color="green" @click.stop="right = !right">
       <v-icon dark>timeline</v-icon>
     </v-btn>
 
@@ -8,7 +8,7 @@
       <v-layout row>
         <v-flex xs12>
           <v-card>
-            <v-toolbar color="indigo" light>
+            <v-toolbar color="green" light>
               <v-toolbar-side-icon></v-toolbar-side-icon>
               <v-spacer></v-spacer>
               <actionButtons/>

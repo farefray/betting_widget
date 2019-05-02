@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
 const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
@@ -89,12 +88,12 @@ module.exports = {
       global: 'window'
     }),
     // Customize your extension structure.
-    htmlPage('home', 'app', ['manifest', 'vendor', 'tab']),
-    htmlPage('popup', 'popup', ['manifest', 'vendor', 'popup']),
-    htmlPage('panel', 'panel', ['manifest', 'vendor', 'panel']),
-    htmlPage('devtools', 'devtools', ['manifest', 'vendor', 'devtools']),
-    htmlPage('options', 'options', ['manifest', 'vendor', 'options']),
-    htmlPage('background', 'background', ['manifest', 'vendor', 'background']),
+    htmlPage('home', 'app', ['manifest', 'tab']),
+    htmlPage('popup', 'popup', ['manifest', 'popup']),
+    htmlPage('panel', 'panel', ['manifest', 'panel']),
+    htmlPage('devtools', 'devtools', ['manifest', 'devtools']),
+    htmlPage('options', 'options', ['manifest', 'options']),
+    htmlPage('background', 'background', ['manifest', 'background']),
     // End customize
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([{ from: path.join(rootDir, 'static') },
@@ -112,8 +111,7 @@ module.exports = {
           return JSON.stringify(jsonContent, null, 2);
         }
       }]),
-    new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') }),
-    new ChromeExtensionReloader()
+    new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') })
   ],
   performance: { hints: false }
 }
