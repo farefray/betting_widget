@@ -15,32 +15,7 @@ export default {
   computed: {},
   created () {},
   mounted () {},
-  methods: {
-    activate: () => {
-      fetch(
-        'https://api.arcadia.pinnacle.com/0.1/bets?status=settled&startDate=2019-3-26&endDate=2019-4-26',
-        {
-          credentials: 'omit',
-          headers: {
-            accept: 'application/json',
-            'content-type': 'application/json',
-            'x-api-key': 'CmX2KcMrXuFmNg6YFbmTxE0y9CIrOi0R',
-            'x-device-uuid': 'b98d4393-d272d471-63370a0c-ee0da2f1',
-            'x-session': 'U97XtmjPxr6VUNeuu8EwFXoxGtktJl2q'
-          },
-          referrer: 'https://future.pinnacle.com/en/account/bets/history/',
-          referrerPolicy: 'no-referrer-when-downgrade',
-          body: null,
-          method: 'GET',
-          mode: 'cors'
-        }
-      ).then(function (response) {
-        return response.json()
-      }).then(function (myJson) {
-        console.log(JSON.stringify(myJson))
-      })
-    }
-  }
+  methods: {}
 }
 </script>
 <style lang="scss">
