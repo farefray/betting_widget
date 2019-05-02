@@ -2,16 +2,17 @@
   <v-data-table
     :headers="headers"
     :items="records"
-    class="elevation-1"
   >
     <template v-slot:items="props">
-      <td>{{ props.item.name }}</td>
-      <td class="text-xs-right">{{ props.item.net_change }}</td>
+      <td>{{ props.item.id }}</td>
+      <td class="text-xs-right">{{ props.item.price }}</td>
     </template>
   </v-data-table>
 </template>
 
 <script>
+  import mockedData from './mock.js';
+  import Record from './Record.js';
   export default {
     data: () => ({
       headers: [
@@ -23,16 +24,14 @@
         },
         { text: 'Net', value: 'net_change' }
       ],
-      records: [
-        {
-          name: 'Test',
-          net_change: 159
-        },
-        {
-          name: 'Test2',
-          net_change: -12
-        }
-      ]
-    })
+      records: []
+    }),
+    mounted () {
+      let records = new Set();
+      mockedData.forEach((record) => {
+        records.add(new Record(record));
+      })
+      console.log(mockedData[0]);
+    }
   }
 </script>

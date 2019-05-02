@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+// const CleanWebpackPlugin = require('clean-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { cssLoaders, htmlPage } = require('./tools')
@@ -110,8 +110,8 @@ module.exports = {
 
           return JSON.stringify(jsonContent, null, 2);
         }
-      }]),
-    new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') })
+      }])//
+    //, new CleanWebpackPlugin(['*'], { root: path.join(rootDir, 'dist') })
   ],
   performance: { hints: false }
 }
