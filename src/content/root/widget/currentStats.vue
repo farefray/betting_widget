@@ -12,8 +12,9 @@
 </template>
 
 <script>
-  import mockedData from './mock.js';
-  import Record from './Record.js';
+  import mockedData from './currentStats/mock.js';
+  import Record from './currentStats/Record.js';
+
   export default {
     data: () => ({
       headers: [
