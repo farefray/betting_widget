@@ -23,7 +23,7 @@
       <v-btn
         color="red"
         flat
-        @click="snackbar = false"
+        @click="snackbar = loading = false"
       >
         Close
       </v-btn>

@@ -32,7 +32,7 @@ export default {
   data: () => ({
     drawer: null,
     drawerRight: null,
-    right: true
+    right: false
   })
 }
 </script>

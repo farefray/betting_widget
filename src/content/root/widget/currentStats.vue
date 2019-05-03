@@ -4,8 +4,9 @@
     :items="records"
   >
     <template v-slot:items="props">
-      <td>{{ props.item.id }}</td>
-      <td class="text-xs-right">{{ props.item.price }}</td>
+      <td class="text-xs-left currentStats-date">{{ props.item.createdAt.toDateString() }}</td>
+      <td>{{ props.item.outcome }}</td>
+      <td class="text-xs-right">{{ props.item.winLoss }}</td>
     </template>
   </v-data-table>
 </template>
@@ -17,21 +18,31 @@
     data: () => ({
       headers: [
         {
-          text: 'Bets',
+          text: 'Date',
           align: 'left',
-          sortable: false,
-          value: 'name'
+          value: 'createdAt'
         },
-        { text: 'Net', value: 'net_change' }
+        { text: 'Outcome', value: 'outcome', sortable: false },
+        { text: 'Net', value: 'winLoss' }
       ],
       records: []
     }),
     mounted () {
-      let records = new Set();
+      let records = [];
       mockedData.forEach((record) => {
-        records.add(new Record(record));
+        records.push(new Record(record));
       })
-      console.log(mockedData[0]);
+
+      this.records = records;
     }
   }
 </script>
+
+<style>
+  /* Hack */
+  .currentStats-date {
+    width: 110px;
+    padding: 16px 0px 0 4px !important;
+    display: block;
+  }
+</style>
