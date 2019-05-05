@@ -11,9 +11,24 @@
             <v-toolbar color="green" light>
               <v-toolbar-side-icon></v-toolbar-side-icon>
               <v-spacer></v-spacer>
-              <actionButtons/>
+              <actionButtons v-on:snack="snack"/>
             </v-toolbar>
-            <currentStats />
+            <currentStats v-on:snack="snack"/>
+            <v-snackbar
+              v-model="snackbar"
+              :timeout="7500"
+              :top="true"
+              :multi-line="true"
+            >
+              {{ snackText }}
+              <v-btn
+                color="red"
+                flat
+                @click="snackbar = loading = false"
+              >
+                Close
+              </v-btn>
+            </v-snackbar>
           </v-card>
         </v-flex>
       </v-layout>
@@ -32,7 +47,15 @@ export default {
   data: () => ({
     drawer: null,
     drawerRight: null,
-    right: false
-  })
+    right: false,
+    snackbar: false,
+    snackText: ''
+  }),
+  methods: {
+    snack: function (text) {
+      this.snackbar = true;
+      this.snackText = text || "";
+    }
+  }
 }
 </script>

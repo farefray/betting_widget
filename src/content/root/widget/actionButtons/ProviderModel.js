@@ -5,6 +5,15 @@ function ProviderModel (hostname) {
   return this;
 }
 
+ProviderModel.prototype = {
+  get provider () {
+    return this._provider;
+  },
+  set provider (provider) {
+    this._provider = provider
+  }
+}
+
 ProviderModel.prototype.hasProvider = function () {
   return !!this.provider;
 };
