@@ -32,7 +32,7 @@ export default {
     summaryStats
   },
   data: () => ({
-    bottomNav: 'recent'
+    bottomNav: 'summary'
   }),
   mounted () {},
   methods: {
