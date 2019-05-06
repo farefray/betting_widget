@@ -1,9 +1,14 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import root from './root.vue'
+
+import 'css-reset-and-normalize/css/reset-and-normalize.css'
+import 'material-icons-font/material-icons-font.css'
 import 'vuetify/dist/vuetify.min.css'
 
-Vue.use(Vuetify, {})
+Vue.use(Vuetify, {
+  theme: false
+})
 
 Vue.config.productionTip = false
 

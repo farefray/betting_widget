@@ -16,13 +16,19 @@ exports.htmlPage = (title, filename, chunks, template) => new HtmlWebpackPlugin(
 exports.cssLoaders = (options = {}) => {
   let loaders = {}
   let prePprocessors = {
-    css: {},
+    css: {
+      loader: 'postcss',
+      options: {
+        ident: 'postcss',
+        sourceMap: true,
+        plugins: (loader) => [
+          require('postcss-parent-selector')({selector: '#statmybets-root'})
+        ]}
+    },
     postcss: {},
     less: { loader: 'less' },
     sass: { loader: 'sass', options: { indentedSyntax: true } },
-    scss: { loader: 'sass' },
-    stylus: { loader: 'stylus' },
-    styl: { loader: 'stylus' }
+    scss: { loader: 'sass' }
   }
   for (let key in prePprocessors) {
     let loader = [{
