@@ -23,7 +23,7 @@
 
 <script>
   import Record from './currentStats/Record.js';
-  import Bin from '../../../modules/Bin';
+  import Bin from '../../../../modules/Bin'; // todo solve with modules aliases
 
   export default {
     data: () => ({
@@ -40,23 +40,23 @@
     }),
     mounted () {},
     methods: {
-    update: function () {
-      const betsBin = new Bin('weeklyBets').get().then((bets) => {
-        console.log(bets);
-        if (bets && bets.length) {
-          let records = [];
-          bets.forEach((record) => {
-            records.push(new Record(record));
-          })
+      update: function () {
+        new Bin('weeklyBets').get().then((bets) => {
+          console.log(bets);
+          if (bets && bets.length) {
+            let records = [];
+            bets.forEach((record) => {
+              records.push(new Record(record));
+            })
 
-          this.records = records;
-          console.log(records);
-        } else {
-          this.$emit('snack', 'No records stored yet. Please, load records from bets provider.');
-        }
-      });
+            this.records = records;
+            console.log(records);
+          } else {
+            this.$emit('snack', 'No records stored yet. Please, load records from bets provider.');
+          }
+        });
+      }
     }
-  },
   }
 </script>
 

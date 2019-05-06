@@ -7,13 +7,14 @@
     <v-navigation-drawer id="inspire" v-model="right" right temporary fixed>
       <v-layout row>
         <v-flex xs12>
-          <v-card>
+          <v-card flat>
             <v-toolbar color="green" light>
               <v-toolbar-side-icon></v-toolbar-side-icon>
               <v-spacer></v-spacer>
               <actionButtons v-on:snack="snack"/>
             </v-toolbar>
-            <currentStats v-on:snack="snack"/>
+            <bottomNavigation v-on:snack="snack"/>
+            
             <v-snackbar
               v-model="snackbar"
               :timeout="7500"
@@ -37,17 +38,17 @@
 </template>
 
 <script>
-import currentStats from './widget/currentStats.vue'
+import bottomNavigation from './widget/bottomNavigation.vue'
 import actionButtons from './widget/actionButtons.vue'
 export default {
   components: {
-    currentStats,
+    bottomNavigation,
     actionButtons
   },
   data: () => ({
     drawer: null,
     drawerRight: null,
-    right: false,
+    right: true,
     snackbar: false,
     snackText: ''
   }),
