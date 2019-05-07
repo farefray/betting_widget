@@ -19,6 +19,10 @@ LocalBetStorage.get = function () {
           records.push(new Record(element));
         });
 
+        records = records.sort((a, b) => {
+          return a.createdAt - b.createdAt;
+        });
+
         return resolve(records)
       }
 

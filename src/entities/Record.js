@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 function Participants (data) {
   let participants = new Set();
   data.forEach(element => {
@@ -12,7 +14,7 @@ function Participants (data) {
 function Matchup (data) {
   const { league, sport } = data;
   this.isLive = data.isLive;
-  this.startTime = new Date(data.startTime);
+  this.startTime = data.startTime;
   this.league = {
     name: league.name,
     group: league.group
@@ -35,10 +37,10 @@ function Selection (data) {
 
 function Record (data) {
   this.id = data.id;
-  this.createdAt = new Date(data.createdAt);
+  this.createdAt = data.createdAt;
   this.outcome = data.outcome;
   this.price = parseInt(data.price);
-  this.settledAt = new Date(data.settledAt);
+  this.settledAt = data.settledAt;
   this.stake = data.stake;
   this.toWin = data.toWin;
   this.winLoss = data.winLoss;
@@ -50,5 +52,17 @@ function Record (data) {
 
   this.selections = selections;
 }
+
+Object.defineProperty(Record.prototype, 'date', {
+  get () {
+    return DateTime.fromISO(this.createdAt);
+  }
+});
+
+Object.defineProperty(Record.prototype, 'shortDate', {
+  get () {
+    return DateTime.fromISO(this.createdAt).toLocaleString(DateTime.DATETIME_SHORT);
+  }
+});
 
 export default Record;

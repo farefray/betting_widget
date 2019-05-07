@@ -13,7 +13,7 @@
       :items="records"
     >
       <template v-slot:items="props">
-        <td class="text-xs-left currentStats-date">{{ props.item.createdAt.toDateString() }}</td>
+        <td class="text-xs-left currentStats-date">{{ props.item.shortDate }}</td>
         <td>{{ props.item.outcome }}</td>
         <td class="text-xs-right">{{ props.item.winLoss }}</td>
       </template>

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { DateTime } from 'luxon';
+import { Interval } from 'luxon';
 import LocalBetStorage from '@modules/LocalBetStorage';
 
 export default {
@@ -24,19 +24,16 @@ export default {
     };
   },
   methods: {
-    getPeriod: function (bets) {
-      if (bets.length < 2) {
-        return '';
-      }
-
-      console.log(bets);
-      const first = DateTime.fromISO(bets[0].createdAt);
-      const last = DateTime.fromISO(bets[bets.length - 1].createdAt);
-      console.log(first);
-      console.log(last);
-      console.log(first.diff(last));
-      console.log(first.diff(last, ['days']));
-      return first.diff(last, ['days']) + 'days';
+    getPeriod: function (records) {
+      const start = records[0].date;
+      const end = records[records.length - 1].date;
+      const days = Math.ceil(Interval.fromDateTimes(start, end).length('days'))
+      return days + ` day${days > 1 ? 's' : ''}`;
+    },
+    getNetChange: function (records) {
+      return (records.reduce((netChange, currentRecord) => {
+        return (netChange.winLoss || netChange) + currentRecord.winLoss;
+      })).toFixed(2) + '$';
     }
   },
   mounted: function () {
@@ -51,14 +48,19 @@ export default {
         subtitle: bets.length || 0
       });
 
+      console.log(bets);
+      if (!bets.length) {
+        return;
+      }
+
       summary.push({
-        title: 'Bets period:',
+        title: 'Recorder period:',
         subtitle: this.getPeriod(bets)
       });
 
       summary.push({
-        title: 'Period net change:',
-        subtitle: '+100$(todo)'
+        title: 'Net change:',
+        subtitle: this.getNetChange(bets)
       });
 
       this.items = summary;
@@ -66,3 +68,9 @@ export default {
   }
 };
 </script>
+
+<style>
+#statmybets-root .v-subheader {
+  font-weight: bold;
+}
+</style>
