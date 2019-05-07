@@ -15,7 +15,7 @@
 
 <script>
 import { DateTime } from 'luxon';
-import Bin from '@modules/Bin';
+import LocalBetStorage from '@modules/LocalBetStorage';
 
 export default {
   data () {
@@ -40,7 +40,7 @@ export default {
     }
   },
   mounted: function () {
-    new Bin('weeklyBets').get([]).then((bets) => {
+    LocalBetStorage.get().then((bets) => {
       let summary = [];
       summary.push({
         header: 'Summary'

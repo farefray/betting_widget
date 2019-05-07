@@ -17,7 +17,7 @@
 
 <script>
 import ProviderModel from './actionButtons/ProviderModel.js';
-import Bin from '@modules/Bin';
+import LocalBetStorage from '@modules/LocalBetStorage';
 
 export default {
   data: () => ({
@@ -36,12 +36,12 @@ export default {
       }
 
       this.loading = true;
-      this.providerModel.provider.request().then((bets) => {
-        const betsBin = new Bin('weeklyBets');
-        betsBin.set(bets);
+      this.providerModel.requestBets().then((bets) => {
+        LocalBetStorage.set(bets);
+        this.$emit('snack', `Imported ${bets.length} records!`);
       }).catch((error) => {
         this.$emit('snack', error.message);
-      }).finally((bets) => {
+      }).finally(() => {
         this.loading = false;
       })
     }

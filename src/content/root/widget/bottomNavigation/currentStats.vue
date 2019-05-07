@@ -22,8 +22,7 @@
 </template>
 
 <script>
-  import Record from '@entities/Record.js';
-  import Bin from '@modules/Bin';
+  import LocalBetStorage from '@modules/LocalBetStorage';
 
   export default {
     data: () => ({
@@ -41,16 +40,9 @@
     mounted () {},
     methods: {
       update: function () {
-        new Bin('weeklyBets').get().then((bets) => {
-          console.log(bets);
+        LocalBetStorage.get().then((bets) => {
           if (bets && bets.length) {
-            let records = [];
-            bets.forEach((record) => {
-              records.push(new Record(record));
-            })
-
-            this.records = records;
-            console.log(records);
+            this.records = bets;
           } else {
             this.$emit('snack', 'No records stored yet. Please, load records from bets provider.');
           }
