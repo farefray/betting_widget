@@ -15,14 +15,32 @@
 
 <script>
 import Bin from '../../../../modules/Bin'; // todo solve with modules aliases
+import { DateTime } from 'luxon';
+
 export default {
   data () {
     return {
       items: []
     };
   },
+  methods: {
+    getPeriod: function (bets) {
+      if (bets.length < 2) {
+        return '';
+      }
+
+      console.log(bets);
+      const first = DateTime.fromISO(bets[0].createdAt);
+      const last = DateTime.fromISO(bets[bets.length - 1].createdAt);
+      console.log(first);
+      console.log(last);
+      console.log(first.diff(last));
+      console.log(first.diff(last, ['days']));
+      return first.diff(last, ['days']) + 'days';
+    }
+  },
   mounted: function () {
-    new Bin('weeklyBets').get().then((bets) => {
+    new Bin('weeklyBets').get([]).then((bets) => {
       let summary = [];
       summary.push({
         header: 'Summary'
@@ -30,12 +48,12 @@ export default {
 
       summary.push({
         title: 'Total bets stored:',
-        subtitle: (bets && bets.length) || 0
+        subtitle: bets.length || 0
       });
 
       summary.push({
         title: 'Bets period:',
-        subtitle: '1 week(todo)'
+        subtitle: this.getPeriod(bets)
       });
 
       summary.push({

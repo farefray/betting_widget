@@ -35,11 +35,22 @@ Bin.prototype.get = function (fallback) {
       console.log('Value currently is:');
       console.log(data);
       data = (data && data[this.id]) || null;
+      fallback = fallback || {};
       if (!data) {
-        return resolve(fallback || {});
+        return resolve(fallback);
       }
 
-      return resolve(JSON.parse(data));
+      try {
+        const parsed = JSON.parse(data);
+
+        if (!parsed.length) {
+          return resolve(fallback);
+        }
+
+        return resolve(parsed);
+      } catch (e) {
+        return resolve(fallback);
+      }
     });
   });
 };
