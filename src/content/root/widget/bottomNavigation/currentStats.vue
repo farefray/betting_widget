@@ -22,8 +22,8 @@
 </template>
 
 <script>
-  import Record from './currentStats/Record.js';
-  import Bin from '../../../../modules/Bin'; // todo solve with modules aliases
+  import Record from '@entities/Record.js';
+  import Bin from '@modules/Bin';
 
   export default {
     data: () => ({

@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import Bin from '../../../../modules/Bin'; // todo solve with modules aliases
 import { DateTime } from 'luxon';
+import Bin from '@modules/Bin';
 
 export default {
   data () {

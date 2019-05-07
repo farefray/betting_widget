@@ -17,7 +17,7 @@
 
 <script>
 import ProviderModel from './actionButtons/ProviderModel.js';
-import Bin from '../../../modules/Bin';
+import Bin from '@modules/Bin';
 
 export default {
   data: () => ({
