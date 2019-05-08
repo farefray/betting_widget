@@ -61,7 +61,7 @@ Object.defineProperty(Record.prototype, 'date', {
 
 Object.defineProperty(Record.prototype, 'shortDate', {
   get () {
-    return DateTime.fromISO(this.createdAt).toLocaleString(DateTime.DATETIME_SHORT);
+    return DateTime.fromISO(this.createdAt).toFormat('DDD T:mm');
   }
 });
 

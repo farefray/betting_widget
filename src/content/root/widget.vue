@@ -4,7 +4,7 @@
       <v-icon dark>timeline</v-icon>
     </v-btn>
 
-    <v-navigation-drawer id="inspire" v-model="right" right temporary fixed>
+    <v-navigation-drawer id="inspire" v-model="right" right temporary fixed width="450px">
       <v-layout row>
         <v-flex xs12>
           <v-card flat>
@@ -13,8 +13,6 @@
               <v-spacer></v-spacer>
               <actionButtons v-on:snack="snack"/>
             </v-toolbar>
-            <bottomNavigation v-on:snack="snack"/>
-            
             <v-snackbar
               v-model="snackbar"
               :timeout="7500"
@@ -31,6 +29,7 @@
               </v-btn>
             </v-snackbar>
           </v-card>
+          <bottomNavigation v-on:snack="snack" :records="records" v-if="loaded"/>
         </v-flex>
       </v-layout>
     </v-navigation-drawer>
@@ -40,6 +39,8 @@
 <script>
 import bottomNavigation from './widget/bottomNavigation.vue'
 import actionButtons from './widget/actionButtons.vue'
+import LocalBetStorage from '@modules/LocalBetStorage';
+
 export default {
   components: {
     bottomNavigation,
@@ -50,13 +51,21 @@ export default {
     drawerRight: null,
     right: true,
     snackbar: false,
-    snackText: ''
+    snackText: '',
+    records: [],
+    loaded: false
   }),
   methods: {
     snack: function (text) {
       this.snackbar = true;
-      this.snackText = text || "";
+      this.snackText = text || '';
     }
+  },
+  mounted: function () {
+    LocalBetStorage.get().then((bets) => {
+      this.records = bets;
+      this.loaded = true;
+    });
   }
 }
 </script>

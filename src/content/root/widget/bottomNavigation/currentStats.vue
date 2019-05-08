@@ -1,16 +1,12 @@
 <template>
   <div>
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn icon light v-on="on" @click="update">
-          <v-icon>cached</v-icon>
-        </v-btn>
-      </template>
-      <span>Refresh</span>
-    </v-tooltip>
     <v-data-table
       :headers="headers"
       :items="records"
+      :search="search"
+      hide-actions
+      :pagination.sync="pagination"
+      :rows-per-page-items="[15]"
     >
       <template v-slot:items="props">
         <td class="text-xs-left currentStats-date">{{ props.item.shortDate }}</td>
@@ -18,14 +14,18 @@
         <td class="text-xs-right">{{ props.item.winLoss }}</td>
       </template>
     </v-data-table>
+    <div class="text-xs-center pt-2">
+      <v-pagination v-model="pagination.page" :length="pages" total-visible="5"></v-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-  import LocalBetStorage from '@modules/LocalBetStorage';
-
   export default {
+    props: ['records'],
     data: () => ({
+      search: '',
+      pagination: {},
       headers: [
         {
           text: 'Date',
@@ -34,20 +34,20 @@
         },
         { text: 'Outcome', value: 'outcome', sortable: false },
         { text: 'Net', value: 'winLoss' }
-      ],
-      records: []
+      ]
     }),
+    computed: {
+      pages () {
+        if (this.pagination.rowsPerPage == null ||
+          this.pagination.totalItems == null
+        ) return 0
+
+        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+      }
+    },
     mounted () {},
     methods: {
-      update: function () {
-        LocalBetStorage.get().then((bets) => {
-          if (bets && bets.length) {
-            this.records = bets;
-          } else {
-            this.$emit('snack', 'No records stored yet. Please, load records from bets provider.');
-          }
-        });
-      }
+      empty: function () {}
     }
   }
 </script>
@@ -55,8 +55,16 @@
 <style>
   /* Hack */
   .currentStats-date {
-    width: 110px;
-    padding: 16px 0px 0 4px !important;
+    padding: 0px 0px 0px 3px !important;
     display: block;
+    height: auto !important;
+  }
+
+  .v-pagination__item--active {
+    color: green !important;
+  }
+
+  #statmybets-root table.v-table tbody td {
+    height: 100%;
   }
 </style>

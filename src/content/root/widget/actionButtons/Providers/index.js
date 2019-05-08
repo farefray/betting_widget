@@ -13,7 +13,7 @@ const supportedProviders = [
         };
 
         pinnacleUserAuth = JSON.parse(pinnacleUserAuth);
-        const startDate = DateTime.local().minus({days: 7}).toISODate();
+        const startDate = DateTime.local().minus({months: 6}).toISODate();
         const endDate = DateTime.local().toISODate();
         fetch(
           `https://api.arcadia.pinnacle.com/0.1/bets?status=settled&startDate=${startDate}&endDate=${endDate}`,

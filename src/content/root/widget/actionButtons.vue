@@ -12,6 +12,14 @@
     <v-btn icon>
       <v-icon>view_module</v-icon>
     </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon light v-on="on" @click="empty">
+          <v-icon>cached</v-icon>
+        </v-btn>
+      </template>
+      <span>Refresh</span>
+    </v-tooltip>
   </div>
 </template>
 
@@ -30,6 +38,9 @@ export default {
     }
   },
   methods: {
+    empty: function () {
+
+    },
     updateBets: function () {
       if (!this.hasProvider) {
         return this.$emit('snack', 'No provider recognized');

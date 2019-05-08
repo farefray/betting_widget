@@ -15,9 +15,9 @@
 
 <script>
 import { Interval } from 'luxon';
-import LocalBetStorage from '@modules/LocalBetStorage';
 
 export default {
+  props: ['records'],
   data () {
     return {
       items: []
@@ -37,34 +37,34 @@ export default {
     }
   },
   mounted: function () {
-    LocalBetStorage.get().then((bets) => {
-      let summary = [];
-      summary.push({
-        header: 'Summary'
-      });
+    const bets = this.records;
 
-      summary.push({
-        title: 'Total bets stored:',
-        subtitle: bets.length || 0
-      });
-
-      console.log(bets);
-      if (!bets.length) {
-        return;
-      }
-
-      summary.push({
-        title: 'Recorder period:',
-        subtitle: this.getPeriod(bets)
-      });
-
-      summary.push({
-        title: 'Net change:',
-        subtitle: this.getNetChange(bets)
-      });
-
-      this.items = summary;
+    let summary = [];
+    summary.push({
+      header: 'Summary'
     });
+
+    summary.push({
+      title: 'Total bets stored:',
+      subtitle: bets.length || 0
+    });
+
+    console.log(bets);
+    if (!bets.length) {
+      return;
+    }
+
+    summary.push({
+      title: 'Recorder period:',
+      subtitle: this.getPeriod(bets)
+    });
+
+    summary.push({
+      title: 'Net change:',
+      subtitle: this.getNetChange(bets)
+    });
+
+    this.items = summary;
   }
 };
 </script>
