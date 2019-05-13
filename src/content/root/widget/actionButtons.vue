@@ -9,9 +9,7 @@
       <span>Update bets from current provider</span>
     </v-tooltip>
     
-    <v-btn icon>
-      <v-icon>view_module</v-icon>
-    </v-btn>
+    <DateRangePicker/>
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
         <v-btn icon light v-on="on" @click="empty">
@@ -26,8 +24,12 @@
 <script>
 import ProviderModel from './actionButtons/ProviderModel.js';
 import LocalBetStorage from '@modules/LocalBetStorage';
+import DateRangePicker from '@components/DateRangePicker';
 
 export default {
+  components: {
+    DateRangePicker
+  },
   data: () => ({
     providerModel: null,
     loading: false

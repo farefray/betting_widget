@@ -7,7 +7,7 @@ module.exports = {
     sourceType: 'module'
   },
   globals: {
-     "chrome": true
+    "chrome": true
     // chrome: true
   },
   env: {
@@ -22,6 +22,7 @@ module.exports = {
   // add your custom rules here
   'rules': {
     // allow paren-less arrow functions
+    "space-before-function-paren": ["error", "always"],
     'arrow-parens': 0,
     // allow async-await
     'generator-star-spacing': 0,
