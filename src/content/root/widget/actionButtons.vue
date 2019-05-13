@@ -9,10 +9,10 @@
       <span>Update bets from current provider</span>
     </v-tooltip>
     
-    <DateRangePicker/>
+    <DateRangePicker v-on:dateRangeUpdated="dateRangeUpdated" />
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon light v-on="on" @click="empty">
+        <v-btn icon light v-on="on" @click="refresh">
           <v-icon>cached</v-icon>
         </v-btn>
       </template>
@@ -32,7 +32,8 @@ export default {
   },
   data: () => ({
     providerModel: null,
-    loading: false
+    loading: false,
+    dateRange: []
   }),
   computed: {
     hasProvider: function () {
@@ -40,8 +41,13 @@ export default {
     }
   },
   methods: {
-    empty: function () {
-
+    empty: function () {},
+    refresh: function () {
+      this.$emit('refresh');
+    },
+    dateRangeUpdated: function (dateRange) {
+      this.dateRange = dateRange;
+      this.$emit('dateRangeUpdated', dateRange);
     },
     updateBets: function () {
       if (!this.hasProvider) {
@@ -49,7 +55,7 @@ export default {
       }
 
       this.loading = true;
-      this.providerModel.requestBets().then((bets) => {
+      this.providerModel.requestBets(this.dateRange).then((bets) => {
         LocalBetStorage.set(bets);
         this.$emit('snack', `Imported ${bets.length} records!`);
       }).catch((error) => {

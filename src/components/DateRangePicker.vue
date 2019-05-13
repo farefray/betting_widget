@@ -19,8 +19,7 @@
     </template>
     <v-date-picker v-model="dates" multiple no-title scrollable @input="onInput">
       <v-spacer></v-spacer>
-      <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-      <v-btn flat color="primary" @click="$refs.menu.save(dates)">OK</v-btn>
+      <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
     </v-date-picker>
   </v-menu>
 </template>
@@ -51,9 +50,20 @@ export default {
     }
   },
   methods: {
+    cancel () {
+      this.menu = false;
+      this.dates = [];
+    },
     onInput (val) {
       if (this.dates.length === 2) {
         this.$refs.menu.save(this.dates);
+
+        const dateRange = {
+          start: DateTime.fromISO(this.dates[0]),
+          end: DateTime.fromISO(this.dates[1])
+        };
+
+        this.$emit('dateRangeUpdated', dateRange);
       }
     },
     isInSelectedRange (date) {

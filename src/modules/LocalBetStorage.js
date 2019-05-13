@@ -10,13 +10,16 @@ LocalBetStorage.set = function (data) {
   betsBin.set(data);
 }
 
-LocalBetStorage.get = function () {
+LocalBetStorage.get = function (dateRange) {
   return new Promise((resolve, reject) => {
     new Bin('LocalBetStorage').get().then((bets) => {
       if (bets && bets.length) {
         let records = [];
         bets.forEach(element => {
-          records.push(new Record(element));
+          const record = new Record(element);
+          if (!dateRange || record.isInRange(dateRange)) {
+            records.push(record);
+          }
         });
 
         records = records.sort((a, b) => {

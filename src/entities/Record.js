@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 
 function Participants (data) {
   let participants = new Set();
@@ -51,6 +51,14 @@ function Record (data) {
   });
 
   this.selections = selections;
+}
+
+Record.prototype.isInRange = function (dateRange) {
+  if (!dateRange || !dateRange.start || !dateRange.end) {
+    return false;
+  }
+
+  return Interval.fromDateTimes(dateRange.start, dateRange.end).contains(this.date);
 }
 
 Object.defineProperty(Record.prototype, 'date', {

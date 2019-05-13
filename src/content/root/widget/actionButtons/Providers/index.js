@@ -1,10 +1,8 @@
 
-import { DateTime } from 'luxon';
-
 const supportedProviders = [
   {
     hostname: 'future.pinnacle.com',
-    request: function () {
+    request: function (dateRange) {
       return new Promise((resolve, reject) => {
         // Grab tokens from local storage to use with our requests
         let pinnacleUserAuth = localStorage['Main:User'];
@@ -13,8 +11,8 @@ const supportedProviders = [
         };
 
         pinnacleUserAuth = JSON.parse(pinnacleUserAuth);
-        const startDate = DateTime.local().minus({months: 6}).toISODate();
-        const endDate = DateTime.local().toISODate();
+        const startDate = dateRange.start.toISODate();
+        const endDate = dateRange.end.toISODate();
         fetch(
           `https://api.arcadia.pinnacle.com/0.1/bets?status=settled&startDate=${startDate}&endDate=${endDate}`,
           {

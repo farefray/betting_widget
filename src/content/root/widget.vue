@@ -11,7 +11,7 @@
             <v-toolbar color="green" light>
               <v-toolbar-side-icon></v-toolbar-side-icon>
               <v-spacer></v-spacer>
-              <actionButtons v-on:snack="snack"/>
+              <actionButtons v-on:snack="snack" v-on:dateRangeUpdated="dateRangeUpdated" v-on:refresh="refresh"/>
             </v-toolbar>
             <v-snackbar
               v-model="snackbar"
@@ -53,19 +53,27 @@ export default {
     snackbar: false,
     snackText: '',
     records: [],
-    loaded: false
+    loaded: false,
+    dateRange: null
   }),
   methods: {
+    refresh: function () {
+      this.loaded = false;
+      LocalBetStorage.get(this.dateRange).then((bets) => {
+        this.records = bets;
+        this.loaded = true;
+      });
+    },
     snack: function (text) {
       this.snackbar = true;
       this.snackText = text || '';
+    },
+    dateRangeUpdated: function (dateRange) {
+      this.dateRange = dateRange;
     }
   },
   mounted: function () {
-    LocalBetStorage.get().then((bets) => {
-      this.records = bets;
-      this.loaded = true;
-    });
+    this.refresh();
   }
 }
 </script>

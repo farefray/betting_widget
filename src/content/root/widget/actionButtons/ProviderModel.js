@@ -18,9 +18,9 @@ ProviderModel.prototype.hasProvider = function () {
   return !!this.provider;
 };
 
-ProviderModel.prototype.requestBets = function () {
+ProviderModel.prototype.requestBets = function (dateRange) {
   return new Promise((resolve) => {
-    this.provider.request().then((bets) => {
+    this.provider.request(dateRange).then((bets) => {
       resolve(bets);
     });
   });
