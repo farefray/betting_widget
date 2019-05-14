@@ -1,9 +1,10 @@
 <template>
-  <div>visual</div>
+  <div id="visual_chart">
+    <apexchart type=line height=350 :options="chartOptions" :series="series" />
+  </div>
 </template>
 
 <script>
-
 export default {
   props: ['records'],
   data () {
