@@ -37,7 +37,6 @@ export default {
   watch: {
     dates (val) {
       val = val.filter(v => !!v);
-      console.log(val);
     }
   },
   computed: {

@@ -49,7 +49,6 @@ export default {
       subtitle: bets.length || 0
     });
 
-    console.log(bets);
     if (!bets.length) {
       return;
     }

@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { DateTime } from 'luxon';
+
 import bottomNavigation from './widget/bottomNavigation.vue'
 import actionButtons from './widget/actionButtons.vue'
 import LocalBetStorage from '@modules/LocalBetStorage';
@@ -73,6 +75,11 @@ export default {
     }
   },
   mounted: function () {
+    this.dateRange = {
+      start: DateTime.local().minus({ days: 7 }),
+      end: DateTime.local()
+    };
+
     this.refresh();
   }
 }
