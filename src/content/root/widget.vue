@@ -4,7 +4,7 @@
       <v-icon dark>timeline</v-icon>
     </v-btn>
 
-    <v-navigation-drawer id="inspire" v-model="right" right temporary fixed width="450px">
+    <v-navigation-drawer id="inspire" v-model="right" right temporary fixed :width="widgetWidth">
       <v-layout row>
         <v-flex xs12>
           <v-card flat>
@@ -29,7 +29,7 @@
               </v-btn>
             </v-snackbar>
           </v-card>
-          <bottomNavigation v-on:snack="snack" :records="records" v-if="loaded"/>
+          <bottomNavigation v-on:widthChange="widthChange" v-on:snack="snack" :records="records" v-if="loaded"/>
         </v-flex>
       </v-layout>
     </v-navigation-drawer>
@@ -56,7 +56,8 @@ export default {
     snackText: '',
     records: [],
     loaded: false,
-    dateRange: null
+    dateRange: null,
+    widgetWidth: 450
   }),
   methods: {
     refresh: function () {
@@ -69,6 +70,9 @@ export default {
     snack: function (text) {
       this.snackbar = true;
       this.snackText = text || '';
+    },
+    widthChange: function (width) {
+      this.widgetWidth = width;
     },
     dateRangeUpdated: function (dateRange) {
       this.dateRange = dateRange;

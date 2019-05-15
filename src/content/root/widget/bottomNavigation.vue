@@ -40,6 +40,11 @@ export default {
     bottomNav: 'summary'
   }),
   mounted () {},
+  watch: {
+    bottomNav (val) {
+      this.$emit('widthChange', val === 'visual' ? 750 : 450);
+    }
+  },
   methods: {
     snack: function (text) {
       this.$emit('snack', text);
