@@ -11,96 +11,61 @@ export default {
     loaded: false,
     series: [],
     chartOptions: {
-      chart: {
-        stacked: false
-      },
-      stroke: {
-        width: [0, 2, 5],
-        curve: 'smooth'
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: '50%'
-        }
-      },
-
-      fill: {
-        opacity: [0.85, 0.25, 1],
-        gradient: {
-          inverseColors: false,
-          shade: 'light',
-          type: 'vertical',
-          opacityFrom: 0.85,
-          opacityTo: 0.55,
-          stops: [0, 100, 100, 100]
-        }
-      },
-      labels: [],
-      markers: {
-        size: 0
+      dataLabels: {
+        enabled: false
       },
       xaxis: {
-        type: 'datetime'
-      },
-      yaxis: {
-        title: {
-          text: 'Points'
-        },
-        min: 0
+        type: 'datetime',
+        tickAmount: 6
       },
       tooltip: {
-        shared: true,
-        intersect: false,
-        y: {
-          formatter: function(y) {
-            if (typeof y !== 'undefined') {
-              return y.toFixed(0) + ' points';
-            }
-            return y;
-          }
+        custom: function({series, seriesIndex, dataPointIndex, w}) {
+          console.log(series);
+          console.log(seriesIndex);
+          console.log(dataPointIndex);
+          return '<div class="arrow_box">' +
+            '<span>' + series[seriesIndex][dataPointIndex] + '</span>' +
+            '</div>'
         }
       }
     }
   }),
   mounted() {
-    console.log(this.records);
-    if (this.records.length) {
-      let labels = [
-        '01/01/2003',
-        '02/01/2003',
-        '03/01/2003',
-        '04/01/2003',
-        '05/01/2003',
-        '06/01/2003',
-        '07/01/2003',
-        '08/01/2003',
-        '09/01/2003',
-        '10/01/2003',
-        '11/01/2003'
-      ];
-      let data = [
-        {
-          name: 'TEAM A',
-          type: 'column',
-          data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
-        },
-        {
-          name: 'TEAM B',
-          type: 'area',
-          data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
-        },
-        {
-          name: 'TEAM C',
-          type: 'line',
-          data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
-        }
-      ];
-      this.records.forEach(record => {
-        console.log(record);
-      });
-      this.chartOptions.labels = labels;
-      this.series = data;
-    }
+    this.$nextTick(() => {
+      console.log(this.records);
+      if (this.records.length) {
+        let data = [
+          {
+            name: 'TEAM',
+            type: 'line',
+            data: []
+          }
+        ];
+
+        let balance = 0;
+        let sameTime = 0;
+        this.records.forEach(record => {
+          balance += record.winLoss;
+          let recordTimestamp = record.unixDate;
+          // Hack to avoid same timestamps in charts(fix me)
+          if (sameTime === recordTimestamp) {
+            recordTimestamp += 1;
+            sameTime = recordTimestamp;
+          }
+
+          data[0].data.push([recordTimestamp, balance]);
+        });
+
+        // Sorting before displaying
+        data[0].data = data[0].data.sort((a, b) => {
+          return a[0] - b[0];
+        });
+
+        console.log(data[0].data);
+        this.series = data;
+        this.loaded = true;
+      }
+    });
   }
 };
 </script>

@@ -73,4 +73,10 @@ Object.defineProperty(Record.prototype, 'shortDate', {
   }
 });
 
+Object.defineProperty(Record.prototype, 'unixDate', {
+  get () {
+    return DateTime.fromISO(this.createdAt).toMillis();
+  }
+});
+
 export default Record;

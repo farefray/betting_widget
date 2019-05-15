@@ -33,6 +33,7 @@
             "run_at": "document_end",
             "matches": [
                 "*://blank.org/",
+                "*://www.blankwebsite.com/",
                 "*://*.pinnacle.com/*"
             ],
             "all_frames": true
