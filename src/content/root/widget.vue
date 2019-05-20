@@ -14,12 +14,13 @@
               <actionButtons v-on:snack="snack" v-on:dateRangeUpdated="dateRangeUpdated" v-on:refresh="refresh"/>
             </v-toolbar>
             <v-snackbar
+              class="widget-snackbar"
               v-model="snackbar"
-              :timeout="7500"
+              :timeout="12500"
               :top="true"
               :multi-line="true"
             >
-              {{ snackText }}
+              <div v-html="snackText"></div>
               <v-btn
                 color="red"
                 flat
@@ -65,6 +66,8 @@ export default {
       LocalBetStorage.get(this.dateRange).then((bets) => {
         this.records = bets;
         this.loaded = true;
+      }).catch((error) => {
+        this.snack(error.message);
       });
     },
     snack: function (text) {
@@ -88,3 +91,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.widget-snackbar .v-snack__content a {
+  font-weight: bold;
+  font-size: 1.15em;
+  display: block;
+  color: green;
+}
+</style>

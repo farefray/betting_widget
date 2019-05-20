@@ -24,5 +24,10 @@ ProviderModel.prototype.requestBets = function (dateRange) {
       resolve(bets);
     });
   });
-}
+};
+
+ProviderModel.getProvidersLinks = function () {
+  return Providers.getLinks();
+};
+
 export default ProviderModel;

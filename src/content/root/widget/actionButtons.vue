@@ -3,7 +3,7 @@
     <v-tooltip bottom v-if="hasProvider">
       <template v-slot:activator="{ on }">
         <v-btn icon light :loading="loading" v-on="on" :disabled="loading" @click="updateBets">
-          <v-icon>cached</v-icon>
+          <v-icon>get_app</v-icon>
         </v-btn>
       </template>
       <span>Update bets from current provider</span>

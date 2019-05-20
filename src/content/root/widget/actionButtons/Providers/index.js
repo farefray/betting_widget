@@ -1,6 +1,8 @@
 
 const supportedProviders = [
   {
+    link: 'https://future.pinnacle.com/en/account/bets/history/',
+    name: 'Pinnacle',
     hostname: 'future.pinnacle.com',
     request: function (dateRange) {
       return new Promise((resolve, reject) => {
@@ -60,6 +62,15 @@ Providers.detect = function (hostname) {
   });
 
   return detectedProvider;
+}
+
+Providers.getLinks = function () {
+  let links = '';
+  supportedProviders.forEach(provider => {
+    links += `<a href="${provider.link}">${provider.name}</a>`;
+  });
+
+  return links;
 }
 
 export default Providers;

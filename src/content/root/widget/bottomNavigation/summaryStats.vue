@@ -38,6 +38,9 @@ export default {
   },
   mounted: function () {
     const bets = this.records;
+    if (!bets.length) {
+      return;
+    }
 
     let summary = [];
     summary.push({
