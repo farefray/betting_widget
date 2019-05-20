@@ -39,7 +39,9 @@ export default {
   data: () => ({
     bottomNav: 'summary'
   }),
-  mounted () {},
+  mounted () {
+    this.bottomNav = 'visual';
+  },
   watch: {
     bottomNav (val) {
       this.$emit('widthChange', val === 'visual' ? 750 : 450);

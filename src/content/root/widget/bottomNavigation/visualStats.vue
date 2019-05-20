@@ -1,6 +1,7 @@
 <template>
   <div id="visual_chart">
     <apexchart type="line" height="350" :options="chartOptions" :series="series" v-if="loaded"/>
+    <div v-if="loaded" v-html="tooltipPreview"></div>
   </div>
 </template>
 
@@ -11,6 +12,11 @@ export default {
   props: ['records'],
   components: {
     recordTooltip
+  },
+  computed: {
+    tooltipPreview: function () {
+      return recordTooltip(this.records[0]);
+    }
   },
   data: () => ({
     loaded: false,
