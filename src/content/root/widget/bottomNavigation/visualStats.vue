@@ -5,8 +5,13 @@
 </template>
 
 <script>
+import recordTooltip from './visualStats/recordTooltip';
+
 export default {
   props: ['records'],
+  components: {
+    recordTooltip
+  },
   data: () => ({
     loaded: false,
     series: [],
@@ -19,13 +24,10 @@ export default {
         tickAmount: 6
       },
       tooltip: {
-        custom: function({series, seriesIndex, dataPointIndex, w}) {
-          console.log(series);
-          console.log(seriesIndex);
-          console.log(dataPointIndex);
-          return '<div class="arrow_box">' +
-            '<span>' + series[seriesIndex][dataPointIndex] + '</span>' +
-            '</div>'
+        custom: ({series, seriesIndex, dataPointIndex, w}) => {
+          const RECORD_INDEX = 2;
+          const record = w.config.series[seriesIndex].data[dataPointIndex][RECORD_INDEX];
+          return recordTooltip(record);
         }
       }
     }
@@ -53,7 +55,7 @@ export default {
             sameTime = recordTimestamp;
           }
 
-          data[0].data.push([recordTimestamp, balance]);
+          data[0].data.push([recordTimestamp, balance, record]);
         });
 
         // Sorting before displaying
@@ -61,7 +63,6 @@ export default {
           return a[0] - b[0];
         });
 
-        console.log(data[0].data);
         this.series = data;
         this.loaded = true;
       }

@@ -1,18 +1,21 @@
 import { DateTime, Interval } from 'luxon';
 
 function Participants (data) {
-  let participants = new Set();
+  let participants = [];
   data.forEach(element => {
-    participants.add({
+    participants.push({
       name: element.name,
       order: element.order,
-      alignment: element.alignment
+      alignment: element.alignment,
+      state: element.state
     });
   });
+
+  return participants;
 }
 
 function Matchup (data) {
-  const { league, sport } = data;
+  const { league, sport, participants } = data;
   this.isLive = data.isLive;
   this.startTime = data.startTime;
   this.league = {
@@ -26,7 +29,7 @@ function Matchup (data) {
     };
   }
 
-  this.participants = new Participants(data.participants);
+  this.participants = new Participants(participants);
 }
 
 function Selection (data) {
@@ -45,9 +48,9 @@ function Record (data) {
   this.toWin = data.toWin;
   this.winLoss = data.winLoss;
 
-  let selections = new Set();
+  let selections = [];
   data.selections.forEach(element => {
-    selections.add(new Selection(element));
+    selections.push(new Selection(element));
   });
 
   this.selections = selections;
@@ -76,6 +79,12 @@ Object.defineProperty(Record.prototype, 'shortDate', {
 Object.defineProperty(Record.prototype, 'unixDate', {
   get () {
     return DateTime.fromISO(this.createdAt).toMillis();
+  }
+});
+
+Object.defineProperty(Record.prototype, 'odds', {
+  get () {
+    return (this.toWin / this.stake).toFixed(2);
   }
 });
 
