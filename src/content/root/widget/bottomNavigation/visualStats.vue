@@ -1,7 +1,10 @@
 <template>
   <div id="visual_chart">
     <apexchart type="line" height="350" :options="chartOptions" :series="series" v-if="loaded"/>
-    <div v-if="loaded" v-html="tooltipPreview"></div>
+    <v-card v-if="loaded" v-html="tooltipPreview" class="betcard-container__full mx-auto"
+  color="#26c6da"
+  dark
+  max-width="400"></v-card>
   </div>
 </template>
 
@@ -76,3 +79,40 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  #statmybets-root .betcard-body {
+    transition: all 0.2s linear;
+    background-color: rgba(255, 255, 255, 0.03);
+    color: black;
+    text-decoration: none;
+    margin-right: 1px;
+    display: flex;
+    flex-direction: column;
+    &__header {
+      justify-self: center;
+    }
+    &__top {
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      &--date, &--status {
+        font-size: 0.75em;
+        margin: 0px 3%;
+      }
+    }
+    &__participant--record {
+      display: flex;
+      justify-content: space-evenly;
+    }
+    &__bottom {
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65em;
+      div {
+        margin: 0 2%;
+      }
+    }
+  }
+</style>
