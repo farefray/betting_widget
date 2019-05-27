@@ -25,6 +25,20 @@ export default {
     loaded: false,
     series: [],
     chartOptions: {
+      annotations: {
+        yaxis: [{
+          y: 0,
+          borderColor: '#999',
+          label: {
+            show: true,
+            text: 'Zero point',
+            style: {
+              color: '#fff',
+              background: '#00E396'
+            }
+          }
+        }]
+      },
       dataLabels: {
         enabled: false
       },
@@ -32,22 +46,47 @@ export default {
         type: 'datetime',
         tickAmount: 6
       },
+      yaxis: {
+        decimalsInFloat: 0
+      },
       tooltip: {
         custom: ({series, seriesIndex, dataPointIndex, w}) => {
           const RECORD_INDEX = 2;
           const record = w.config.series[seriesIndex].data[dataPointIndex][RECORD_INDEX];
           return recordTooltip(record);
         }
+      },
+      markers: {
+        size: 4,
+        opacity: 0.9,
+        colors: ['#FFA41B'],
+        strokeColor: '#fff',
+        strokeWidth: 2,
+        hover: {
+          size: 7
+        },
+        discrete: []
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'dark',
+          gradientToColors: ['#16ce50'],
+          shadeIntensity: 1,
+          type: 'horizontal',
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [0, 100, 100, 100]
+        }
       }
     }
   }),
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       console.log(this.records);
       if (this.records.length) {
-        let data = [
+        const series = [
           {
-            name: 'TEAM',
             type: 'line',
             data: []
           }
@@ -55,6 +94,14 @@ export default {
 
         let balance = 0;
         let sameTime = 0;
+        const recordsAverages = {
+          stack: {
+            min: 0,
+            max: 0,
+            avg: 0,
+            total: 0
+          }
+        }
         this.records.forEach(record => {
           balance += record.winLoss;
           let recordTimestamp = record.unixDate;
@@ -64,18 +111,52 @@ export default {
             sameTime = recordTimestamp;
           }
 
-          data[0].data.push([recordTimestamp, balance, record]);
+          if (recordsAverages.stack.min > record.stake) {
+            recordsAverages.stack.min = record.stake;
+          }
+
+          if (recordsAverages.stack.max < record.stake) {
+            recordsAverages.stack.max = record.stake;
+          }
+
+          recordsAverages.stack.avg += record.stake;
+          recordsAverages.stack.total += 1;
+
+          series[0].data.push([recordTimestamp, balance, record]);
         });
 
+        recordsAverages.stack.avg = recordsAverages.stack.avg / recordsAverages.stack.total;
+
         // Sorting before displaying
-        data[0].data = data[0].data.sort((a, b) => {
+        series[0].data = series[0].data.sort((a, b) => {
           return a[0] - b[0];
         });
 
-        this.series = data;
+        const discrete = [];
+        let dataPointIndex = 0;
+        series[0].data.forEach(element => {
+          const record = element[2];
+          discrete.push({
+            seriesIndex: 0,
+            dataPointIndex: dataPointIndex,
+            fillColor: record.winLoss > 0 ? '#16ce50' : '#ba0707',
+            strokeColor: '#eee',
+            size: this.getMarkerSize(record, recordsAverages.stack)
+          });
+
+          dataPointIndex += 1;
+        });
+
+        this.series = series;
+        this.chartOptions.markers.discrete = discrete;
         this.loaded = true;
       }
     });
+  },
+  methods: {
+    getMarkerSize (record, stats) {
+      return 10 / 100 * (record.stake / ((stats.min + stats.max) / 100));
+    }
   }
 };
 </script>
