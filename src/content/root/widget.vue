@@ -5,8 +5,8 @@
     </v-btn>
 
     <v-navigation-drawer id="inspire" v-model="right" right temporary fixed :width="widgetWidth">
-      <v-layout row>
-        <v-flex xs12>
+      <v-layout align-space-between column>
+        <v-flex xs1 class="widget-header">
           <v-card flat>
             <v-toolbar color="green" light>
               <v-toolbar-side-icon></v-toolbar-side-icon>
@@ -30,6 +30,8 @@
               </v-btn>
             </v-snackbar>
           </v-card>
+        </v-flex>
+        <v-flex xs12>
           <bottomNavigation v-on:widthChange="widthChange" v-on:snack="snack" :records="records" v-if="loaded"/>
         </v-flex>
       </v-layout>
@@ -93,6 +95,9 @@ export default {
 </script>
 
 <style>
+.widget-header {
+  z-index: 10;
+}
 .widget-snackbar .v-snack__content a {
   font-weight: bold;
   font-size: 1.15em;

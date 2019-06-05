@@ -6,7 +6,7 @@
       :search="search"
       hide-actions
       :pagination.sync="pagination"
-      :rows-per-page-items="[15]"
+      :rows-per-page-items="[10]"
     >
       <template v-slot:items="props">
         <td class="text-xs-left currentStats-date">{{ props.item.shortDate }}</td>
