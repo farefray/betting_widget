@@ -1,7 +1,8 @@
 import Providers from './Providers';
+import { rejects } from 'assert';
 
-function ProviderModel (hostname) {
-  this.provider = Providers.detect(hostname);
+function ProviderModel () {
+  this.provider = Providers.detect(window.location.hostname);
   return this;
 }
 
@@ -19,7 +20,11 @@ ProviderModel.prototype.hasProvider = function () {
 };
 
 ProviderModel.prototype.requestBets = function (dateRange) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    if (!dateRange.start || !dateRange.end) {
+      return reject(new Error('You need to select date range first.'));
+    }
+
     this.provider.request(dateRange).then((bets) => {
       resolve(bets);
     });
@@ -28,6 +33,10 @@ ProviderModel.prototype.requestBets = function (dateRange) {
 
 ProviderModel.getProvidersLinks = function () {
   return Providers.getLinks();
+};
+
+ProviderModel.isProvider = function () {
+  return Providers.detect(window.location.hostname);
 };
 
 export default ProviderModel;

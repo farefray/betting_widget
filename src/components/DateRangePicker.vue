@@ -1,82 +1,68 @@
 <template>
-  <v-menu
-    ref="menu"
-    v-model="menu"
-    :close-on-content-click="false"
-    :nudge-right="40"
-    :return-value.sync="dates"
-    lazy
-    transition="scale-transition"
-    offset-y
-    full-width
-    min-width="290px"
-    style="display:inline-flex"
-  >
-    <template v-slot:activator="{ on }">
-      <v-btn dark v-on="on">
-        {{selectedRange}}
-      </v-btn>
-    </template>
-    <v-date-picker v-model="dates" multiple no-title scrollable @input="onInput">
-      <v-spacer></v-spacer>
-      <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-    </v-date-picker>
-  </v-menu>
+    <functional-calendar
+      v-model="calendarData"
+      ref="Calendar"
+      :change-month-function='true'
+      :is-modal='true'
+      :is-date-range='true'
+      @closed="onCalendarClosed">
+    </functional-calendar>
 </template>
 
 <script>
-import { DateTime, Interval } from 'luxon';
+import { FunctionalCalendar } from 'vue-functional-calendar';
+import { DateTime } from 'luxon';
 
 export default {
+  components: {
+    FunctionalCalendar
+  },
   data () {
     return {
-      dates: [],
-      menu: false
+      calendarData: {}
     };
   },
-  watch: {
-    dates (val) {
-      val = val.filter(v => !!v);
-    }
-  },
-  computed: {
-    selectedRange (date) {
-      if (this.dates.length === 2) {
-        return this.dates[0] + ' - ' + this.dates[1];
-      }
-
-      return 'No range selected';
-    }
-  },
+  computed: {},
   methods: {
-    cancel () {
-      this.menu = false;
-      this.dates = [];
+    preMonth () {
+      this.$refs.Calendar.PreMonth();
     },
-    onInput (val) {
-      if (this.dates.length === 2) {
-        this.$refs.menu.save(this.dates);
-
-        const dateRange = {
-          start: DateTime.fromISO(this.dates[0]),
-          end: DateTime.fromISO(this.dates[1])
-        };
-
-        this.$emit('dateRangeUpdated', dateRange);
+    nextMonth () {
+      this.$refs.Calendar.NextMonth();
+    },
+    preYear () {
+      this.$refs.Calendar.PreYear();
+    },
+    nextYear () {
+      this.$refs.Calendar.NextYear();
+    },
+    onCalendarClosed () {
+      console.log(this.calendarData);
+      const dateRange = this.calendarData.dateRange || {};
+      if (dateRange.start && dateRange.end) {
+        this.$emit('dateRangeUpdated', {
+          start: DateTime.fromFormat(dateRange.start.date, 'd/M/yyyy'),
+          end: DateTime.fromFormat(dateRange.end.date, 'd/M/yyyy')
+        });
       }
-    },
-    isInSelectedRange (date) {
-      return Interval.fromDateTimes(DateTime.fromISO(this.dates[0]), DateTime.fromISO(this.dates[1])).contains(
-        DateTime.fromISO(date)
-      );
     }
   },
   created () {}
 };
 </script>
 
-<style lang="scss" scoped>
-#statmybets-root .v-date-picker-table .v-btn.v-btn--active {
-  color: green;
+<style lang="scss" scroped>
+#statmybets-root {
+  @import "./DateRangePicker/style.scss";
+
+  .vfc-main-container.vfc-modal {
+    left: 35px;
+    top: 9px;
+  }
 }
+
+#statmybets-root .vfc-styles-conditional-class {
+  display: inline-block;
+}
+
 </style>

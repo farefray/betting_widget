@@ -71,8 +71,10 @@ export default {
 };
 </script>
 
-<style>
-#statmybets-root .v-subheader {
-  font-weight: bold;
+<style lang="scss">
+#statmybets-root {
+  .v-subheader {
+    font-weight: bold;
+  }
 }
 </style>

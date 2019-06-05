@@ -34,7 +34,9 @@ LocalBetStorage.get = function (dateRange) {
         return resolve(records)
       }
 
-      reject(new Error('No records stored yet. Please, load records from bets provider: ' + this.getProvidersLinks()));
+      if (!ProviderModel.isProvider()) {
+        reject(new Error('No records stored yet. Please, load records from bets provider: ' + this.getProvidersLinks()));
+      }
     });
   });
 }

@@ -3,7 +3,10 @@ import Vuetify from 'vuetify'
 import VueApexCharts from 'vue-apexcharts'
 import root from './root.vue'
 
+// Reset CSS
 import 'css-reset-and-normalize/css/reset-and-normalize.css'
+
+// Base CSS
 import 'material-icons-font/material-icons-font.css'
 import 'vuetify/dist/vuetify.min.css'
 

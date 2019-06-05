@@ -66,7 +66,7 @@ export default {
     }
   },
   mounted () {
-    this.providerModel = new ProviderModel(window.location.hostname);
+    this.providerModel = new ProviderModel();
   }
 }
 </script>
