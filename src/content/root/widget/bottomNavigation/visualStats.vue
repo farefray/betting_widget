@@ -1,15 +1,20 @@
 <template>
   <div id="visual_chart">
-    <apexchart type="line" height="350" :options="chartOptions" :series="series" v-if="loaded"/>
-    <v-card v-if="loaded" v-html="tooltipPreview" class="betcard-container__full mx-auto"
-  color="#26c6da"
-  dark
-  max-width="400"></v-card>
+    <apexchart type="line" height="350" :options="chartOptions" :series="series" v-if="loaded" v-on:dataPointSelection="dataPointSelection"/>
+    <v-card
+      v-if="loaded"
+      v-html="tooltipPreview"
+      class="betcard-container__full mx-auto"
+      color="#26c6da"
+      dark
+      max-width="400"
+    ></v-card>
   </div>
 </template>
 
 <script>
 import recordTooltip from './visualStats/recordTooltip';
+import chartConfig from './visualStats/chartConfig';
 
 export default {
   props: ['records'],
@@ -18,72 +23,17 @@ export default {
   },
   computed: {
     tooltipPreview: function () {
-      return recordTooltip(this.records[0]);
+      return this.previewRecord && recordTooltip(this.previewRecord);
     }
   },
   data: () => ({
     loaded: false,
     series: [],
-    chartOptions: {
-      annotations: {
-        yaxis: [{
-          y: 0,
-          borderColor: '#999',
-          label: {
-            show: true,
-            text: 'Zero point',
-            style: {
-              color: '#fff',
-              background: '#00E396'
-            }
-          }
-        }]
-      },
-      dataLabels: {
-        enabled: false
-      },
-      xaxis: {
-        type: 'datetime',
-        tickAmount: 6
-      },
-      yaxis: {
-        decimalsInFloat: 0
-      },
-      tooltip: {
-        custom: ({series, seriesIndex, dataPointIndex, w}) => {
-          const RECORD_INDEX = 2;
-          const record = w.config.series[seriesIndex].data[dataPointIndex][RECORD_INDEX];
-          return recordTooltip(record);
-        }
-      },
-      markers: {
-        size: 4,
-        opacity: 0.9,
-        colors: ['#FFA41B'],
-        strokeColor: '#fff',
-        strokeWidth: 2,
-        hover: {
-          size: 7
-        },
-        discrete: []
-      },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'dark',
-          gradientToColors: ['#16ce50'],
-          shadeIntensity: 1,
-          type: 'horizontal',
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 100, 100, 100]
-        }
-      }
-    }
+    previewRecord: null,
+    chartOptions: chartConfig
   }),
   mounted () {
     this.$nextTick(() => {
-      console.log(this.records);
       if (this.records.length) {
         const series = [
           {
@@ -102,8 +52,12 @@ export default {
             total: 0
           }
         }
+
+        console.log('b:' + balance);
         this.records.forEach(record => {
           balance += record.winLoss;
+          console.log('w:' + record.winLoss);
+          console.log('b:' + balance);
           let recordTimestamp = record.unixDate;
           // Hack to avoid same timestamps in charts(fix me)
           if (sameTime === recordTimestamp) {
@@ -126,11 +80,6 @@ export default {
         });
 
         recordsAverages.stack.avg = recordsAverages.stack.avg / recordsAverages.stack.total;
-
-        // Sorting before displaying
-        series[0].data = series[0].data.sort((a, b) => {
-          return a[0] - b[0];
-        });
 
         const discrete = [];
         let dataPointIndex = 0;
@@ -156,44 +105,48 @@ export default {
   methods: {
     getMarkerSize (record, stats) {
       return 10 / 100 * (record.stake / ((stats.min + stats.max) / 100));
+    },
+    dataPointSelection (event, chartContext, config) {
+      this.previewRecord = this.records[config.dataPointIndex];
     }
   }
 };
 </script>
 
 <style lang="scss">
-  #statmybets-root .betcard-body {
-    transition: all 0.2s linear;
-    background-color: rgba(255, 255, 255, 0.03);
-    color: black;
-    text-decoration: none;
-    margin-right: 1px;
+#statmybets-root .betcard-body {
+  transition: all 0.2s linear;
+  background-color: rgba(255, 255, 255, 0.03);
+  color: black;
+  text-decoration: none;
+  margin-right: 1px;
+  display: flex;
+  flex-direction: column;
+  &__header {
+    justify-self: center;
+  }
+  &__top {
+    flex-direction: row;
     display: flex;
-    flex-direction: column;
-    &__header {
-      justify-self: center;
-    }
-    &__top {
-      flex-direction: row;
-      display: flex;
-      justify-content: space-between;
-      &--date, &--status {
-        font-size: 0.75em;
-        margin: 0px 3%;
-      }
-    }
-    &__participant--record {
-      display: flex;
-      justify-content: space-evenly;
-    }
-    &__bottom {
-      flex-direction: row;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.65em;
-      div {
-        margin: 0 2%;
-      }
+    justify-content: space-between;
+    &--date,
+    &--status {
+      font-size: 0.75em;
+      margin: 0px 3%;
     }
   }
+  &__participant--record {
+    display: flex;
+    justify-content: space-evenly;
+  }
+  &__bottom {
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65em;
+    div {
+      margin: 0 2%;
+    }
+  }
+}
 </style>

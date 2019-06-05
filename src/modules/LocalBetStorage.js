@@ -28,7 +28,7 @@ LocalBetStorage.get = function (dateRange) {
         });
 
         records = records.sort((a, b) => {
-          return a.createdAt - b.createdAt;
+          return a.unixDate - b.unixDate;
         });
 
         return resolve(records)
