@@ -10,7 +10,7 @@
     "cross-env": "^5.2.0",
     "css-reset-and-normalize": "^2.0.1",
     "lodash": "^4.17.4",
-    "luxon": "^1.13.0",
+    "luxon": "^2.5.2",
     "material-icons-font": "^1.4.2",
     "postcss-loader": "^3.0.0",
     "postcss-parent-selector": "^1.0.0",
